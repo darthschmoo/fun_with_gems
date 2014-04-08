@@ -26,9 +26,17 @@ end
 require 'test/unit'
 require 'shoulda'
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+# $LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'fun_with_testing'
 require 'fun_with_gems'
 
+FunWith::Gems.make_gem_fun( FunWith::Testing, :require => false )
+
 class Test::Unit::TestCase
+end
+
+class FunWith::Gems::TestCase < FunWith::Testing::TestCase
+  include FunWith::Testing::Assertions::Basics
 end
