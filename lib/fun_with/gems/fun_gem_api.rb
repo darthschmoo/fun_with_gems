@@ -6,7 +6,7 @@ module FunWith
       end
       
       def validate_gem
-        FunWith::Gems::Validator.new(self).validate
+        FunWith::Gems::Validator.new( self ).validate
       end
       
       def valid_gem?

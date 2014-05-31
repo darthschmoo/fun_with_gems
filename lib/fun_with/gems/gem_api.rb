@@ -18,7 +18,7 @@ module FunWith
       # :require => false (avoids requiring the default lib/fun_with dir.)
       # :require => filepath or array of filepaths   (require these things instead (note: not in addition to))
       def make_gem_fun( gem_const, opts = {} )
-        @caller_file = caller.first.gsub(/:\d+:.*/,'')
+        @caller_file = caller.first.gsub(/:\d+:.*/,'').fwf_filepath
         @opts = opts
         set_gem_const( gem_const )
         @gem_const.extend( FunGemAPI )
@@ -69,9 +69,10 @@ module FunWith
           VersionStrings.versionize( @gem_const )
         end
       end
+      
       def require_libs
         unless @opts[:require] == false
-          @opts[:require] ||= [ @gem_const.root( "lib", "fun_with" ) ]
+          @opts[:require] ||= @gem_const.root( "lib" ).glob(:all, :recursive => false) - [ @caller_file ]
           @opts[:require] = [ @opts[:require] ] unless @opts[:require].is_a?(Array)
         
           @opts[:require].each do |req_dir|

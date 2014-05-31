@@ -1,7 +1,7 @@
 require "fun_with_version_strings"
 require "fun_with_files"
 
-FunWith::VersionStrings.versionize( FunWith::Files )
+# FunWith::VersionStrings.versionize( FunWith::Files )
 
 lib_dir = __FILE__.fwf_filepath.dirname
 lib_dir.join( "fun_with", "gems", "gem_api.rb" ).requir

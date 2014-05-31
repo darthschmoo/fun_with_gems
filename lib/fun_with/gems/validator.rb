@@ -20,7 +20,7 @@ module FunWith
             @fun_gem_errors << ".root() doesn't exist"                unless @gem_const.root.directory?
             @fun_gem_errors << "VERSION file doesn't exist"           unless @gem_const.root("VERSION").file?
             @fun_gem_errors << "CHANGELOG.markdown doesn't exist"     unless @gem_const.root("CHANGELOG.markdown")
-            @fun_gem_errors << "lib/fun_with directory doesn't exist" unless @gem_const.root("lib", "fun_with").directory?
+            @fun_gem_errors << "lib directory doesn't exist"          unless @gem_const.root("lib").directory?
           else
             @fun_gem_errors << ".root() doesn't give a filepath"
           end
