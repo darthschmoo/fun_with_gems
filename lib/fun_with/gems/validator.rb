@@ -1,8 +1,6 @@
 module FunWith
   module Gems
     class Validator
-      TEST_SUITE_DATA_REGEX = /(<?tests>\d+) tests, (<?assertions>\d+) assertions, (<?failures>\d+) failures, (<?errors>\d+) errors, (<?skips>\d+) skips/
-
       def self.validate( gem_const )
         self.new( gem_const ).validate
       end
@@ -28,9 +26,7 @@ module FunWith
           @fun_gem_errors << "doesn't respond to .root()"
         end
         
-        if @gem_const.respond_to?(:version)
-          
-        else
+        if ! @gem_const.respond_to?(:version)
           @fun_gem_errors << "doesn't respond to .version()"
         end
         
@@ -40,21 +36,6 @@ module FunWith
       def fun_gem_errors
         @fun_gem_errors
       end
-      
-      
-      def passes_tests?( filepath )
-        @test_output = `cd #{filepath} && rake`
-        results = scan_results( @test_output )
-      end
-      
-      def scan_results( str )
-        if m = str.match( TEST_SUITE_DATA_REGEX )
-          m[0]
-        else
-          "TEST STATS NOT FOUND"
-        end
-      end
-      
       
       def git_up_to_date?( filepath )
         # On branch master

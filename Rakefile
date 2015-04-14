@@ -1,55 +1,23 @@
 # encoding: utf-8
+require_relative 'lib/fun_with_gems'
 
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'rake'
+FunWith::Gems::Rakefile.setup FunWith::Gems, self
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
+# Completely pointless wrapper for Jeweler::Tasks.new
+FunWith::Gems::Rakefile.specification do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "fun_with_gems"
-  gem.homepage = "http://github.com/darthschmoo/fun_with_gems"
-  gem.license = "MIT"
-  gem.summary = "Dependency for most of my FunWith:: gems.  Not much use standalone."
+  gem.name        = "fun_with_gems"
+  gem.homepage    = "http://github.com/darthschmoo/fun_with_gems"
+  gem.license     = "MIT"
+  gem.summary     = "Dependency for most of my FunWith:: gems.  Not much use standalone."
   gem.description = "Dependency for FunWith gems, simplifies the setup of new gems, installing version data, root filepath, and default requirements."
-  gem.email = "keeputahweird@gmail.com"
-  gem.authors = ["Bryce Anderson"]
+  gem.email       = "keeputahweird@gmail.com"
+  gem.authors     = ["Bryce Anderson"]
   # dependencies defined in Gemfile
   
   gem.files = Dir.glob( File.join( ".", "lib", "**", "*.rb" ) ) + 
               Dir.glob( File.join( ".", "test", "**", "*" ) ) +
               %w( Gemfile Rakefile LICENSE.txt README.rdoc VERSION CHANGELOG.markdown )  
 end
-Jeweler::RubygemsDotOrgTasks.new
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-desc "Code coverage detail"
-task :simplecov do
-  ENV['COVERAGE'] = "true"
-  Rake::Task['test'].execute
-end
-
-task :default => :test
-
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "fun_with_gems #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
+FunWith::Gems::Rakefile.setup_gem_boilerplate

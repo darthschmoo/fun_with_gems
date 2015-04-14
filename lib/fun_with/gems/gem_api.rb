@@ -25,6 +25,9 @@ module FunWith
         set_gem_root
         set_gem_version
         require_libs
+        extend_constant_with_gem_api
+        @gem_const.gem_verbose = opts[:verbose]
+        @gem_const.load_external_tasks  # Nothing happens unless 'rake' gem is active
       end
       
       protected
@@ -78,6 +81,12 @@ module FunWith
           @opts[:require].each do |req_dir|
             req_dir.fwf_filepath.expand.requir
           end
+        end
+      end
+      
+      def extend_constant_with_gem_api
+        if defined?( @gem_const::GemAPI )
+          @gem_const.extend( @gem_const::GemAPI )
         end
       end
     end

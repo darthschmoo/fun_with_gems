@@ -1,15 +1,24 @@
 module FunWith
   module Gems
     module RakeClassMethods
+      attr_accessor :gem
+      
       def setup this_gem, rake_main
         set_gem        this_gem
         set_rake_main  rake_main
         run_bundler_setup
-        load_tasks
+        
+        # Internal tasks are set up in the Rakefile.  
+        # External tasks (visible to the gems that depend on your fungem) are setup during the normal gem setup, if the 'rake' gem is present.
+        get_gem.load_internal_tasks     
       end
       
       def set_gem g
         @gem = g
+      end
+      
+      def get_gem
+        @gem
       end
       
       def set_rake_main m
@@ -81,30 +90,6 @@ module FunWith
           raise ArgumentError.new("Block must be given")
         else
           @rake_main.instance_eval &block
-        end
-      end
-      
-      def load_tasks
-        load_internal_tasks
-        load_external_tasks
-      end
-      
-      def load_internal_tasks
-        load_tasks_from @gem.root( "tasks" )
-      end
-      
-      def load_external_tasks
-        loat_tasks_from @gem.root( "lib", "tasks" )
-      end
-      
-      def load_tasks_from dir
-        dir.glob do |file|
-          if file.file? && ( file.ext == "rb" || file.ext == "rake" )
-            puts "Adding tasks from #{file}"
-            run_in_rakefile do
-              load file
-            end
-          end
         end
       end
     end

@@ -16,6 +16,6 @@ group :development do
   gem "fun_with_testing", "~> 0.0"
 end
 
-gem "fun_with_files", "~> 0.0", ">= 0.0.7"
+gem "fun_with_files", "~> 0.0", ">= 0.0.13"
 gem "fun_with_version_strings", "~> 0.0", ">= 0.0.3"
 
