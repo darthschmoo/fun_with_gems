@@ -1,8 +1,14 @@
 module FunWith
   module Llamas
     class Trainer
-      def handle( llama )
-        llama.brush
+      attr_accessor :name
+      
+      def initialize( name )
+        @name = name
+      end
+      
+      def brush( llama )
+        llama.brushed_by( self )
       end
     end
   end

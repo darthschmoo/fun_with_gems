@@ -1,5 +1,47 @@
 = fun_with_gems
 
+Opinionated Ruby gems with a consistent file schema.  Gems made easy.
+
+FWGems assumes turns one of the modules defined in your gem folder to be "the fun gem."
+
+You define the gem in the file lib/<gem_initialization_file>.rb  by putting the following contents in it:
+
+    require 'fun_with_gems'
+    FunWith::Gems.make_gem_fun( "MyNeatoGem" )
+    
+Doing this has the following effects:
+
+* Identifies the gem as being a 'fun gem' (`MyNeatoGem.is_fun_gem? => true`)
+* learns where the gem's root directory is (you can find this info by calling `MyNeatoGem.root`)
+* loads the "VERSION" file at the root of the directory (get via `MyNeatoGem.version`, `MyNeatoGem.version.(major|minor|patch)`)
+    * .version returns a subclass of string, but one that understands that "0.2" < "0.12", making version comparisons sensible.
+* loads every file in the `<ROOT>/lib/<GEM_NAME>` directory.
+* If there is a file `lib/my_neato_gem/gem_api.rb`, we expect it to define MyNeatoGem::GemAPI, which is used to extend MyNeatoGem.  
+
+
+
+
+Should also:
+
+* TODO: Check for API modules and attach them to their apis.  For example, if there's a lib/my_neato_gem/api.rb, and it defines a module MyNeatoGem::API, the MyNeatoGem module should be extended with the module 
+
+
+Testing!
+
+Simplifies your Rakefile
+
+
+
+
+
+
+Features:
+
+* Version...ing?
+
+
+
+
 Description goes here.
 
 == Contributing to fun_with_gems

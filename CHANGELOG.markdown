@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+v0.0.6
+------
+
+Simpler Rakefile, using expectations about which folders/files should be included.  `add_specification_files()`
+
+v0.0.5
+------
+
+Moved all "test the gem" code to a separate `fun_with_gemdev` gem.
+
 v0.0.3
 ------
 

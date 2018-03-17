@@ -1,5 +1,6 @@
 module FunWith
   module Gems
+    # TODO: Move all validation / testing code to fun_with_gemdev
     class Validator
       def self.validate( gem_const )
         self.new( gem_const ).validate

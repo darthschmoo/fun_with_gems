@@ -26,8 +26,7 @@ module FunWith
       end
       
       def run_bundler_setup
-        jeweler_requirements
-        rake_requirements
+        all_requirements
         
         begin
           Bundler.setup(:default, :development)
@@ -39,14 +38,14 @@ module FunWith
       end
       
       def specification &block
-        Jeweler::Tasks.new do |gem|
+        Juwelier::Tasks.new do |gem|
           yield gem
         end
       end
       
       def setup_gem_boilerplate
         run_in_rakefile do
-          Jeweler::RubygemsDotOrgTasks.new
+          Juwelier::RubygemsDotOrgTasks.new
 
           Rake::TestTask.new(:test) do |test|
             test.libs << 'lib' << 'test'
@@ -73,14 +72,14 @@ module FunWith
         end
       end
       
-      def jeweler_requirements
-        require 'rake'
-        require 'jeweler'
-      end
-      
-      def rake_requirements
-        require 'rdoc/task'
-        require 'rake/testtask'
+      def all_requirements
+        run_in_rakefile do
+          require 'rake'
+          require 'juwelier'
+          require 'rdoc/task'
+          require 'rake/testtask'
+          require 'bundler'
+        end
       end
       
       def run_in_rakefile &block
@@ -89,8 +88,22 @@ module FunWith
         elsif ! block_given?
           raise ArgumentError.new("Block must be given")
         else
-          @rake_main.instance_eval &block
+          @rake_main.instance_eval( &block )
         end
+      end
+      
+      def gem_files( *args, &block )
+        Dir.glob( File.join( ".", "lib", "**", "*.rb" ) ) +
+                    Dir.glob( File.join( ".", "test", "**", "*.*" ) ) +
+                    [ "Gemfile",
+                      "Rakefile",
+                      "LICENSE.txt",
+                      "README.rdoc",
+                      "VERSION"
+                    ]
+
+
+        
       end
     end
   end

@@ -18,6 +18,7 @@ module FunWith
       # :require => false (avoids requiring the default lib/fun_with dir.)
       # :require => filepath or array of filepaths   (require these things instead (note: not in addition to))
       def make_gem_fun( gem_const, opts = {} )
+        
         @caller_file = caller.first.gsub(/:\d+:.*/,'').fwf_filepath
         @opts = opts
         set_gem_const( gem_const )
