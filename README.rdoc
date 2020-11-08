@@ -2,7 +2,7 @@
 
 Opinionated Ruby gems with a consistent file schema.  Gems made easy.
 
-FWGems assumes turns one of the modules defined in your gem folder to be "the fun gem."
+FunWith::Gems assumes turns one of the modules defined in your gem folder to be "the fun gem."
 
 You define the gem in the file lib/<gem_initialization_file>.rb  by putting the following contents in it:
 
@@ -29,6 +29,79 @@ Should also:
 Testing!
 
 Simplifies your Rakefile
+
+
+
+
+
+
+
+
+Testing
+-------
+
+
+
+
+
+
+
+
+
+
+Where to put things and what those things do
+---------------------------------------------
+
+Let's say your gem is called Cobbler.  It... cobbles things.  It lives in a folder called `cobbler`.
+
+    cobbler/                     Cobbler.root() should return the location of this directory in the filespace
+      ↳ bin/
+        cobbler                  An executable that should maybe somehow be available from the command line.
+                                 Multiple executables might live here.
+                                 
+      ↳ config/                  Anything you could think of as "gem configuration" would go in this folder.
+        ↳ gem_config.rb          Alternately, could be a YAML file (.yml or .yaml)
+                                 Either way, it gets loaded into a FunWith::Configurations::Config object
+                                 that can be accessed through Cobbler.config
+      ↳ cache/                   Might make more sense to use the ~/.cache/cobbler_gem directory?
+      ↳ lib/
+        ↳ cobbler.rb             Where the gem initialization stuff lives (including invoking make_gem_fun())
+        - cobbler/
+          ↳ core_extensions/
+            ↳ string.rb
+            ↳ nil_class.rb       Cobbler::CoreExtensions::NilClass gets included in nil, making nil more useful
+            ↳ integer.rb         Cobbler::CoreExtensions::Integer extends the Integer class
+            
+            ↳ gem_api.rb          Cobbler::GemAPI 
+            ↳ testing/
+              ↳ assertions.rb              This is where you put testing assertions that you want to be available
+                                           to gems that include Cobbler as a dependency
+              ↳ test_case_extensions.rb    ????
+              
+        ↳ fun_with/                        Example: Anything that would extend a FunWith gem
+        ↳ active_record/                   Example: Anything you'd use to extend/override something in ActiveRecord
+          
+      ↳ test/
+        ↳ lib/
+          useful_testing_class.rb        Classes that you can use in testing.  Everything in the directory gets
+                                         loaded before the tests run.
+      ↳ VERSION                 The file contains a simple string, like 12.3.11
+                                calling Cobbler.version returns a VersionString object
+                                
+      ↳ Rakefile                
+                                
+                              
+      
+For local settings, FunWith::Gems tries to loosely follow the XDG guidelines, which can be found at https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html .
+
+(proposed) 
+
+    ~/.config/cobbler.gem/gem_config.(rb/yml)     # if present, the configuration can override and extend gem configurations
+    ~/.cache/cobbler.gem/                         # data caches and whatnot
+  
+This could be improved further by checking for the $XDG_ environment variables
+
+How much use is there for both a gem cache and a user cache?
 
 
 

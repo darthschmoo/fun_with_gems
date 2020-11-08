@@ -49,3 +49,7 @@ pkg
 
 # For rubinius:
 #*.rbc
+
+
+# for byebug
+.byebug_history

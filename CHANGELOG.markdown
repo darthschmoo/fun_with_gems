@@ -1,10 +1,17 @@
 CHANGELOG
 =========
 
+v0.0.7
+------
+
+Separating some functionality into other gems.
+
 v0.0.6
 ------
 
-Simpler Rakefile, using expectations about which folders/files should be included.  `add_specification_files()`
+* Simpler Rakefile, using expectations about which folders/files should be included.  `add_specification_files()`
+* Added auto-loading of Gem::Name::CoreExtension modules to base classes.
+* FunWith::Gems::Inclusionizer provides a useful, opinionated way to organize your code for mixins.
 
 v0.0.5
 ------

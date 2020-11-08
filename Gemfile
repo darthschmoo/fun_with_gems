@@ -9,6 +9,7 @@ group :development do
   gem "fun_with_testing", "~> 0.0", ">= 0.0.8"
 end
 
+gem "rake"
 gem "fun_with_files", "~> 0.0", ">= 0.0.17"             
 gem "fun_with_version_strings", "~> 0.0", ">= 0.0.4"
 

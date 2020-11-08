@@ -4,21 +4,14 @@ module FunWith
       attr_accessor :gem
       
       def rakefile_setup this_gem   # , rake_main
-        set_gem        this_gem
+        self.gem = this_gem
+        
         # set_rake_main  rake_main
         run_bundler_setup
         
         # Internal tasks are set up in the Rakefile.  
         # External tasks (visible to the gems that depend on your fungem) are setup during the normal gem setup, if the 'rake' gem is present.
-        get_gem.load_internal_tasks     
-      end
-      
-      def set_gem g
-        @gem = g
-      end
-      
-      def get_gem
-        @gem
+        self.gem.load_internal_tasks     
       end
       
       # def set_rake_main m
@@ -42,6 +35,7 @@ module FunWith
           yield gem
         end
       end
+      
       
       def setup_gem_boilerplate
         # run_in_rakefile do
@@ -91,27 +85,27 @@ module FunWith
       
       
       def add_specification_files( gem_specification, *args )
-        gem_file_list = gem_specification.files
-        
         root = "".fwf_filepath
         
         for arg in args
           case arg
           when :default
-            gem_file_list += root.join( :bin ).glob
-            gem_file_list += root.join( :config ).glob
-            gem_file_list += root.join( :examples ).glob
-            gem_file_list += [ "Gemfile", "Rakefile", "VERSION" ]
-            gem_file_list += root.join( :lib ).glob( :all, :ext => :rb )
-            gem_file_list += root.join( :lib ).glob( :all, :ext => :rake )
-            gem_file_list += root.join( :test ).glob
-            gem_file_list += root.entries.select{|p| p.path =~ /^LICENSE\./ }
-            gem_file_list += root.entries.select{|p| p.path =~ /^CHANGELOG\./ }
-            gem_file_list += root.entries.select{|p| p.path =~ /^README\./ }
-            gem_file_list += root.entries.select{|p| p.path =~ /^CODE_OF_CONDUCT\./ }
+            files = []
+            files += root.join( :bin ).glob
+            files += root.join( :config ).glob
+            files += root.join( :examples ).glob
+            files += [ "Gemfile", "Rakefile", "VERSION" ]
+            files += root.join( :lib ).glob( :all, :ext => :rb )
+            files += root.join( :lib ).glob( :all, :ext => :rake )
+            files += root.join( :test ).glob
+            files += root.entries.select{|p| p.path =~ /^LICENSE\./ }
+            files += root.entries.select{|p| p.path =~ /^CHANGELOG\./ }
+            files += root.entries.select{|p| p.path =~ /^README\./ }
+            files += root.entries.select{|p| p.path =~ /^CODE_OF_CONDUCT\./ }
+            
+            gem_specification.files += files.flatten.compact
           else
-            debugger
-            5
+            gem_specification.files += root.glob( arg )
           end
         end
       end

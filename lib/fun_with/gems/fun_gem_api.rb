@@ -1,12 +1,13 @@
 module FunWith
   module Gems
+    # The API that gets added to a "gem module" by FunWithGems.make_gem_fun(*)
     module FunGemAPI
       def is_fun_gem?
         true
       end
       
       def validate_gem
-        errors = FunWith::Gems::Validator.validate self
+        errors = FunWith::Gems::Testing::Validator.validate self
         errors
       end
       
@@ -16,11 +17,12 @@ module FunWith
       end
       
       def passes_tests?
-        TestSuiteRunner.new( self ).passes_tests?
+        FunWith::Gems::Testing::TestSuiteRunner.new( self ).passes_tests?
       end
       
       def gem_test_mode?
-        @fwg_gem_test_mode || false
+        @fwg_gem_test_mode = false unless defined?( @fwg_gem_test_mode )
+        @fwg_gem_test_mode
       end
       
       # I can't think of a compelling reason to go beyond true/false here
@@ -40,6 +42,9 @@ module FunWith
         stream.puts( msg ) if gem_verbose?
       end
       
+      def setup_for_testing
+        FunWith::Gems::Testing::TestSetup.setup( self )
+      end
       
       def load_tasks
         load_internal_tasks
@@ -62,7 +67,11 @@ module FunWith
         if _rake_gem_loaded?
           dir.glob do |file|
             if file.file? && ( file.ext == "rb" || file.ext == "rake" )
-              Rake.load_rakefile file
+              if Rake.respond_to?( :load_rakefile )
+                Rake.load_rakefile file
+              else
+                warn "Rake doesn't respond to .load_rakefile(), #{file} not loaded."
+              end
             end
           end
         end
