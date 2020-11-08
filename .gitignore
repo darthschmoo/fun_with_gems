@@ -53,3 +53,8 @@ pkg
 
 # for byebug
 .byebug_history
+
+
+
+# other stuff
+publication_steps.txt
