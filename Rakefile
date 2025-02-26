@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require_relative 'lib/fun_with_gems'
-require "byebug"
 self.extend( FunWith::Gems::Rakefile )
 
 rakefile_setup( FunWith::Gems )

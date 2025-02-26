@@ -15,8 +15,10 @@ Doing this has the following effects:
 * learns where the gem's root directory is (you can find this info by calling `MyNeatoGem.root`)
 * loads the "VERSION" file at the root of the directory (get via `MyNeatoGem.version`, `MyNeatoGem.version.(major|minor|patch)`)
     * .version returns a subclass of string, but one that understands that "0.2" < "0.12", making version comparisons sensible.
-* loads every file in the `<ROOT>/lib/<GEM_NAME>` directory.
-* If there is a file `lib/my_neato_gem/gem_api.rb`, we expect it to define MyNeatoGem::GemAPI, which is used to extend MyNeatoGem.  
+* loads every file in the `<ROOT>/lib/<GEM_NAME>` directory.  Don't expect them to be loaded in any specific order.
+* If there is a file `lib/my_neato_gem/gem_api.rb`, we expect it to define MyNeatoGem::GemAPI, which is used to extend MyNeatoGem with callable methods.  
+
+  
 
 
 
@@ -52,7 +54,7 @@ Testing
 Where to put things and what those things do
 ---------------------------------------------
 
-Let's say your gem is called Cobbler.  It... cobbles things.  It lives in a folder called `cobbler`.
+Let's say your gem is called Cobbler.  It... cobbles... um, things.  It lives in a folder called `cobbler`.
 
     cobbler/                     Cobbler.root() should return the location of this directory in the filespace
       ↳ bin/
@@ -66,7 +68,7 @@ Let's say your gem is called Cobbler.  It... cobbles things.  It lives in a fold
       ↳ cache/                   Might make more sense to use the ~/.cache/cobbler_gem directory?
       ↳ lib/
         ↳ cobbler.rb             Where the gem initialization stuff lives (including invoking make_gem_fun())
-        - cobbler/
+        ↳ cobbler/
           ↳ core_extensions/
             ↳ string.rb
             ↳ nil_class.rb       Cobbler::CoreExtensions::NilClass gets included in nil, making nil more useful
@@ -80,16 +82,23 @@ Let's say your gem is called Cobbler.  It... cobbles things.  It lives in a fold
               
         ↳ fun_with/                        Example: Anything that would extend a FunWith gem
         ↳ active_record/                   Example: Anything you'd use to extend/override something in ActiveRecord
+                                           It might not be good to encourage gem authors to do this sort of thing.
           
       ↳ test/
+        ↳ data/                          Data that the tests can test against.  For example, if your gem plays with
+                                         ebooks, this might be a place to put compiled ebooks and source directory
+                                         trees.  If it plays with images, sample images would go here.
+        ↳ fixtures/                      (not implemented)
         ↳ lib/
           useful_testing_class.rb        Classes that you can use in testing.  Everything in the directory gets
-                                         loaded before the tests run.
+                                         require'd before the tests run.
       ↳ VERSION                 The file contains a simple string, like 12.3.11
-                                calling Cobbler.version returns a VersionString object
+                                calling Cobbler.version returns a VersionString object (a string that also responds
+                                to major(), minor(), patch() etc, and comparisons between version strings actually
+                                work as you'd hope)
                                 
       ↳ Rakefile                
-                                
+      ↳ Gemfile                          
                               
       
 For local settings, FunWith::Gems tries to loosely follow the XDG guidelines, which can be found at https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html .
@@ -129,6 +138,6 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2014 Bryce Anderson. See LICENSE.txt for
+Copyright (c) 2020 Bryce Anderson. See LICENSE.txt for
 further details.
 

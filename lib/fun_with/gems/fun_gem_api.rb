@@ -63,22 +63,34 @@ module FunWith
         _load_tasks_from_directory self.root( "lib", "tasks" )
       end
       
+      protected
       def _load_tasks_from_directory dir
-        if _rake_gem_loaded?
-          dir.glob do |file|
-            if file.file? && ( file.ext == "rb" || file.ext == "rake" )
-              if Rake.respond_to?( :load_rakefile )
-                Rake.load_rakefile file
-              else
-                warn "Rake doesn't respond to .load_rakefile(), #{file} not loaded."
-              end
-            end
+        _rake_gem_loaded? do
+          files = dir.glob.select{ |f| 
+            f.file? && ( f.ext == "rb" || f.ext == "rake" ) 
+          }
+          
+          return false if files.length == 0
+        
+          unless Rake.respond_to?( :load_rakefile )
+            puts "Rake.load_rakefile missing: #{files.length} files will not be loaded."
+            return false
+          end
+          
+          for file in files
+            Rake.load_rakefile( file )
           end
         end
       end
       
-      def _rake_gem_loaded?
-        defined?( Gem ) && Gem.respond_to?( :loaded_specs ) && defined?( Rake ) && Gem.loaded_specs.keys.include?( "rake" )
+      def _rake_gem_loaded?( &block )
+        loaded = defined?( Gem ) && Gem.respond_to?( :loaded_specs ) && defined?( Rake ) && Gem.loaded_specs.keys.include?( "rake" )
+        
+        if block_given?
+          yield if loaded
+        else
+          loaded
+        end
       end
     end
   end

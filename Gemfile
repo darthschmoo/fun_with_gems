@@ -12,4 +12,4 @@ end
 gem "rake"
 gem "fun_with_files", "~> 0.0", ">= 0.0.17"             
 gem "fun_with_version_strings", "~> 0.0", ">= 0.0.4"
-
+gem "sorted_set"   # why is it even asking for this?
