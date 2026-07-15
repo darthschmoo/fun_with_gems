@@ -36,12 +36,14 @@ module FunWith
         @gem_const.extend( FunGemAPI )
         set_gem_root                   unless @opts[:set_root] == false
         set_gem_version                unless @opts[:set_version] == false
+        @gem_const.gem_verbose = opts[:verbose]
         
         # false to skip requiring entirely
         # an array to load both
-        require_libs                   unless @opts[:require] == false    
-        extend_constant_with_gem_api   unless @opts[:gem_api] == false
-        @gem_const.gem_verbose = opts[:verbose]
+        require_libs                   unless @opts[:require] == false
+        
+        extend_constant_with_gem_api   unless @opts[:gem_api] == false  
+        
         @gem_const.load_external_tasks  # Nothing happens unless 'rake' gem is active
         
         include_core_extensions        unless @opts[:core_extensions] == false

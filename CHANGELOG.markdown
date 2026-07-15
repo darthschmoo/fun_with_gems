@@ -4,7 +4,11 @@ CHANGELOG
 v0.0.7
 ------
 
-Separating some functionality into other gems.
+Separating some functionality into other gems. Or not?  I think this is an old comment.  The idea was to break off a bunch of gems and have FWG bring them in as dependencies.  But I never got around to it.  Requirements gem might be a good candidate.  
+
+Maybe keep the gem monolithic, but figure out how to let users do `require "fun_with_gems/inclusionizer"` or something.
+
+Consider also moving the testing/assertions into the test/lib directory for new gems, since only the test suite needs to see them.
 
 v0.0.6
 ------
